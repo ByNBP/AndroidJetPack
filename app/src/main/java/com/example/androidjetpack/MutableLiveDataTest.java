@@ -2,14 +2,12 @@ package com.example.androidjetpack;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.Random;
 
-public class MultipleLiveData extends ViewModel {
-
+public class MutableLiveDataTest extends ViewModel {
     private MutableLiveData<String> myRandomNumber;
 
     public MutableLiveData<String> getNumber() {
@@ -35,4 +33,3 @@ public class MultipleLiveData extends ViewModel {
         Log.d("TAG", "Cleared !! ");
     }
 }
-

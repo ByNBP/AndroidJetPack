@@ -3,19 +3,12 @@ package com.example.androidjetpack;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-
-import android.*;
-
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.security.acl.Owner;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,10 +25,8 @@ public class MainActivity extends AppCompatActivity {
 //        DataGeneratorViewModel model = ViewModelProviders.of(this).get(DataGeneratorViewModel.class);
 //        mText.setText(model.getNumber());
 
-
         button = findViewById(R.id.buttonChange);
-
-        final MultipleLiveData model = ViewModelProviders.of(this).get(MultipleLiveData.class);
+        final MutableLiveDataTest model = ViewModelProviders.of(this).get(MutableLiveDataTest.class);
         final LiveData<String> randomNumber = model.getNumber();
         randomNumber.observe(this, new Observer<String>() {
             @Override
@@ -52,9 +43,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-        Log.d("TAG",   "Random Number Set");
+        Log.d("TAG", "Random Number Set");
         Log.i("LifeCycle", "Owner : ON_CREATE");
         getLifecycle().addObserver(new MainActivityObserver());
     }
