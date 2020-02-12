@@ -1,6 +1,8 @@
 package com.example.androidjetpack;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -9,7 +11,11 @@ import android.*;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import java.security.acl.Owner;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,19 +23,38 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Button button;
+        final TextView mText = findViewById(R.id.number_content);
+//      DataGeneratorViewModel myData = new DataGeneratorViewModel();// content her değiştiğinde sayıda değişir..!!
 
 
-        TextView mText = findViewById(R.id.number_content);
-//        DataGeneratorViewModel myData = new DataGeneratorViewModel();
-        DataGeneratorViewModel model = ViewModelProviders.of(this).get(DataGeneratorViewModel.class);
+        //content yenılense bıle değer kaybolmaz aynı datayı tutar. !!
+//        DataGeneratorViewModel model = ViewModelProviders.of(this).get(DataGeneratorViewModel.class);
+//        mText.setText(model.getNumber());
 
-        mText.setText(model.getNumber());
+
+        button = findViewById(R.id.buttonChange);
+
+        final MultipleLiveData model = ViewModelProviders.of(this).get(MultipleLiveData.class);
+        final LiveData<String> randomNumber = model.getNumber();
+        randomNumber.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                mText.setText(s);
+                Log.d("TAG", "Data Changed in UI !");
+
+            }
+        });
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                model.createNumber();
+            }
+        });
+
+
 
         Log.d("TAG",   "Random Number Set");
-
-
-
-
         Log.i("LifeCycle", "Owner : ON_CREATE");
         getLifecycle().addObserver(new MainActivityObserver());
     }
