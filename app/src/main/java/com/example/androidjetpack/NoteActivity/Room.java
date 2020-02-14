@@ -12,15 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.androidjetpack.NoteActivity.EditNote.EditNoteActivity;
 import com.example.androidjetpack.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 import java.util.UUID;
 
-public class Room extends AppCompatActivity {
+public class Room extends AppCompatActivity implements NoteListAdapter.OnDeleteClickListener {
 
     private static final int NEW_NOTE_ACTIVITY_REQUEST_CODE = 1;
+    public  static final int UPDATE_NOTE_ACTIVITY_REQUEST_CODE = 2;
 
     FloatingActionButton button;
     private NoteViewModel noteViewModel;
@@ -56,7 +58,7 @@ public class Room extends AppCompatActivity {
         });
 
         recyclerView = findViewById(R.id.liste);
-        noteListAdapter = new NoteListAdapter(this, layoutInflater);
+        noteListAdapter = new NoteListAdapter(this,this);
         recyclerView.setAdapter(noteListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -76,7 +78,19 @@ public class Room extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),
                     "Saved",
                     Toast.LENGTH_SHORT).show();
-        } else {
+        }else if (requestCode == UPDATE_NOTE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+
+            Note note = new Note(
+                    data.getStringExtra(EditNoteActivity.NOTE_ID),
+                    data.getStringExtra(EditNoteActivity.UPDATED_NOTE));
+            noteViewModel.update(note);
+
+            Toast.makeText(getApplicationContext(),R.string.update,Toast.LENGTH_SHORT).show();
+
+
+
+        }
+        else {
             Toast.makeText(getApplicationContext(),
                     "Not Saved !! ",
                     Toast.LENGTH_SHORT).show();
@@ -84,4 +98,10 @@ public class Room extends AppCompatActivity {
 
     }
 
+    @Override
+    public void OnDeleteClickListener(Note myNote) {
+
+        noteViewModel.delete(myNote);
+
+    }
 }

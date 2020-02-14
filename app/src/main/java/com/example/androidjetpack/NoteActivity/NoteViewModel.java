@@ -29,6 +29,14 @@ public class NoteViewModel extends AndroidViewModel {
         new InsertAsyncTask(noteDao).execute(note);
     }
 
+    public void update(Note note) {
+        new UpdateAsyncTask(noteDao).execute(note);
+    }
+
+    public void delete(Note note) {
+        new DeleteAsyncTask(noteDao).execute(note);
+    }
+
     LiveData<List<Note>> getAllNotes() {
         return mAllNotes;
     }
@@ -39,20 +47,60 @@ public class NoteViewModel extends AndroidViewModel {
         Log.i("TAG", "ViewModel Destroyed !!");
     }
 
-    private class InsertAsyncTask extends AsyncTask<Note, Void, Void> {
+    private class OperationalAsyncTask extends AsyncTask<Note, Void, Void> {
 
-        NoteDao mNoteDao;
+        NoteDao myAsyncTaskDao;
 
-        public InsertAsyncTask(NoteDao mNoteDao) {
-            this.mNoteDao = mNoteDao;
+        OperationalAsyncTask(NoteDao dao) {
+            this.myAsyncTaskDao = dao;
         }
 
         @Override
         protected Void doInBackground(Note... notes) {
-            mNoteDao.insert(notes[0]);
             return null;
         }
     }
 
 
+    private class InsertAsyncTask extends OperationalAsyncTask {
+
+        public InsertAsyncTask(NoteDao mNoteDao) {
+            super(mNoteDao);
+        }
+
+        @Override
+        protected Void doInBackground(Note... notes) {
+            myAsyncTaskDao.insert(notes[0]);
+            return null;
+        }
+    }
+
+    private class UpdateAsyncTask extends OperationalAsyncTask {
+
+        public UpdateAsyncTask(NoteDao noteDao) {
+
+            super(noteDao);
+        }
+
+        @Override
+        protected Void doInBackground(Note... notes) {
+            myAsyncTaskDao.update(notes[0]);
+            return null;
+        }
+    }
+
+    private class DeleteAsyncTask extends OperationalAsyncTask {
+
+        public DeleteAsyncTask(NoteDao noteDao) {
+            super(noteDao);
+        }
+
+        @Override
+        protected Void doInBackground(Note... notes) {
+
+            myAsyncTaskDao.delete(notes[0]);
+
+            return null;
+        }
+    }
 }
