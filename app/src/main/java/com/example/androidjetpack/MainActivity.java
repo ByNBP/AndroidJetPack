@@ -4,11 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.androidjetpack.NoteActivity.Room;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button button;
+        Button roomPage;
         final TextView mText = findViewById(R.id.number_content);
 //      DataGeneratorViewModel myData = new DataGeneratorViewModel();// content her değiştiğinde sayıda değişir..!!
 
@@ -26,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 //        mText.setText(model.getNumber());
 
         button = findViewById(R.id.buttonChange);
+        roomPage = findViewById(R.id.buttonPage);
         final MutableLiveDataTest model = ViewModelProviders.of(this).get(MutableLiveDataTest.class);
         final LiveData<String> randomNumber = model.getNumber();
         randomNumber.observe(this, new Observer<String>() {
@@ -46,6 +52,16 @@ public class MainActivity extends AppCompatActivity {
         Log.d("TAG", "Random Number Set");
         Log.i("LifeCycle", "Owner : ON_CREATE");
         getLifecycle().addObserver(new MainActivityObserver());
+
+
+        roomPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Room.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
